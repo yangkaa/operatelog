@@ -41,11 +41,13 @@ func main() {
 	g.Logger = logrus.StandardLogger()
 
 	mkyAuditLogCtrl:= controller.NewMkyAuditLogController()
+	uiCtrl := controller.NewIndexCtrl()
 	objects := []*inject.Object{
 		{Value: instance.DB()},
 		{Value: models.NewMkyAuditLogRepo()},
 		{Value: usecase.NewMkyAuditLogUcase()},
 		{Value: mkyAuditLogCtrl},
+		{Value: uiCtrl},
 	}
 
 	if err := g.Provide(objects...); err != nil {
