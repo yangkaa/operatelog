@@ -33,6 +33,10 @@ func NewIndexCtrl() *IndexCtrl {
 	return &IndexCtrl{uiPath: http.Dir(uipath)}
 }
 
+func (i IndexCtrl) DisablePrefix() bool {
+	return true
+}
+
 // WebService returns the restful webservice
 func (i IndexCtrl) WebService(ws *restful.WebService) {
 	// swagger spec define

@@ -21,6 +21,10 @@ func NewMkyAuditLogController() *MkyAuditLogController {
 	return &MkyAuditLogController{}
 }
 
+func (m *MkyAuditLogController) DisablePrefix() bool {
+	return false
+}
+
 // WebService -
 func (m *MkyAuditLogController) WebService(ws *restful.WebService) {
 	tags := []string{"MkyAuditLog"}

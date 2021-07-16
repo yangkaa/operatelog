@@ -21,6 +21,7 @@ import (
 
 //Controller controller
 type Controller interface {
+	DisablePrefix() bool
 	WebService(ws *restful.WebService)
 }
 
@@ -97,7 +98,16 @@ func (s *Service) Add(services ...Controller) {
 		s.ws.Path(fmt.Sprintf("/%s/%s/", s.name, s.version)).Consumes(restful.MIME_JSON).Produces(restful.MIME_JSON)
 	}
 	for i := range services {
-		services[i].WebService(s.ws)
+		if !services[i].DisablePrefix() {
+			services[i].WebService(s.ws)
+		} else {
+			if s.noPrifixWs == nil {
+				s.noPrifixWs = new(restful.WebService)
+				s.noPrifixWs.Consumes(restful.MIME_JSON, "application/x-www-form-urlencoded").Produces(restful.MIME_JSON)
+			}
+			services[i].WebService(s.noPrifixWs)
+		}
+		logrus.Infof("controller %T regist router", services[i])
 	}
 }
 
