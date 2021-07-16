@@ -8,7 +8,7 @@ RUN go build -ldflags "-w -s" -o _output/linux-amd64/operatelog ./cmd/operatelog
 FROM node:14 as uibuilder
 ADD ui /ui
 WORKDIR /ui
-RUN npm config set registry https://registry.npm.taobao.org && npm install && npm run lint && yarn build
+RUN npm config set registry https://registry.npm.taobao.org && npm install && npm run build
 
 FROM goodrainapps/alpine:3.4
 RUN apk add --update tzdata
