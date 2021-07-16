@@ -123,7 +123,9 @@ export default {
       list: [],
       total: null,
       listLoading: true,
-      endTime: this.moment(new Date()).format("hh:mm:ss"),
+      endTime: this.moment(new Date())
+        .locale("zh-cn")
+        .format("HH:mm:ss"),
       expireTimeOption: {
         disabledDate(time) {
           return time.getTime() > Date.now();
