@@ -56,7 +56,7 @@ func main() {
 	if err := g.Populate(); err != nil {
 		logrus.Fatalf("populate the incomplete Objects: %v", err)
 	}
-	service.Add(mkyAuditLogCtrl)
+	service.Add(mkyAuditLogCtrl, uiCtrl)
 
 	errChan := make(chan error, 1)
 	service.Run(errChan)
