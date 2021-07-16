@@ -41,13 +41,13 @@ func (i IndexCtrl) DisablePrefix() bool {
 func (i IndexCtrl) WebService(ws *restful.WebService) {
 	// swagger spec define
 	ws.Route(ws.GET("/").To(i.index))
-	ws.Route(ws.GET("/css/{subpath:*}").To(i.staic))
-	ws.Route(ws.GET("/js/{subpath:*}").To(i.staic))
-	ws.Route(ws.GET("/assets/{subpath:*}").To(i.staic))
-	ws.Route(ws.GET("/images/{subpath:*}").To(i.staic))
-	ws.Route(ws.GET("/ui/{subpath:*}").To(i.index))
-	ws.Route(ws.GET("/user/{subpath:*}").To(i.index))
-	ws.Route(ws.GET("/app-server/{subpath:*}").To(i.appProxy))
+	ws.Route(ws.GET("/static/css/{subpath:*}").To(i.staic))
+	ws.Route(ws.GET("/static/js/{subpath:*}").To(i.staic))
+	ws.Route(ws.GET("/static/assets/{subpath:*}").To(i.staic))
+	ws.Route(ws.GET("/static/images/{subpath:*}").To(i.staic))
+	ws.Route(ws.GET("/static/ui/{subpath:*}").To(i.index))
+	ws.Route(ws.GET("/static/user/{subpath:*}").To(i.index))
+	ws.Route(ws.GET("/static/app-server/{subpath:*}").To(i.appProxy))
 }
 
 func (i IndexCtrl) index(request *restful.Request, response *restful.Response) {
