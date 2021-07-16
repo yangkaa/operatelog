@@ -1,21 +1,21 @@
 FROM golang:1.13 as builder
-ENV CGO_ENABLED=0
-ENV GOPATH=/go
+ADD . /go/src/github.com/operatelog
+WORKDIR /go/src/github.com/operatelog
 ENV GOPROXY=https://goproxy.cn
 
-WORKDIR /go/src/goodrain.com/operatelog
-COPY . .
+RUN go build -ldflags "-w -s" -o _output/linux-amd64/operatelog ./cmd/operatelog
 
-ARG GOARCH
-ARG LDFLAGS
-RUN go build -ldflags "$LDFLAGS" -o /log $PWD/cmd/log
+FROM node:14 as uibuilder
+ADD ui /ui
+WORKDIR /ui
+RUN npm config set registry https://registry.npm.taobao.org && npm install && npm run lint && yarn build
 
-FROM alpine:3.11.2
-RUN apk add --update tzdata \
-    && mkdir /app \
-    && apk add --update apache2-utils \
-    && rm -rf /var/cache/apk/*
+FROM goodrainapps/alpine:3.4
+RUN apk add --update tzdata
 ENV TZ=Asia/Shanghai
-COPY --from=builder log /app
-
-ENTRYPOINT ["/app/log"]
+COPY --from=builder /go/src/github.com/operatelog/_output/linux-amd64/dbox /app/dbox
+COPY --from=uibuilder /ui/dist /app/ui/dist
+WORKDIR /app
+ENV PORT=8080
+EXPOSE 8080
+CMD ["./operatelog"]
