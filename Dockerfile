@@ -15,7 +15,7 @@ RUN apk add --update tzdata
 ENV TZ=Asia/Shanghai
 COPY --from=builder /go/src/github.com/operatelog/_output/linux-amd64/operatelog /app/operatelog
 COPY --from=uibuilder /ui/dist /app/ui/dist
-COPY --from=uibuilder /ui/web.conf /etc/nginx/conf.d/web.conf
+#COPY --from=uibuilder /ui/web.conf /etc/nginx/conf.d/web.conf
 WORKDIR /app
 ENV PORT=8080
 EXPOSE 8080
