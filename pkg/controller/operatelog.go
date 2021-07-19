@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"github.com/emicklei/go-restful"
 	restfulspec "github.com/emicklei/go-restful-openapi"
 	"goodrain.com/operatelog/cmd/operatelog/config"
@@ -47,21 +46,31 @@ func (m *MkyAuditLogController) WebService(ws *restful.WebService) {
 
 func (m *MkyAuditLogController) createMkyAuditLog(r *restful.Request, w *restful.Response) {
 	token := r.HeaderParameter("Authorization")
+	var resp = &v1.Response{
+		Message: "请求成功",
+		Code:    http.StatusOK,
+	}
 	if token == "" || token != config.C.AccessToken {
-		w.WriteError(http.StatusForbidden, fmt.Errorf("forbidden"))
+		resp.Message = "无权访问本api，请授权后在进行访问"
+		resp.Code = http.StatusForbidden
+		w.WriteHeaderAndEntity(http.StatusForbidden, resp)
 		return
 	}
 	var req v1.MkyAuditLog
 	if err := r.ReadEntity(&req); err != nil {
-		w.WriteError(http.StatusBadRequest, err)
+		resp.Message = "请求错误，请检查请求参数"
+		resp.Code = http.StatusBadRequest
+		w.WriteHeaderAndEntity(http.StatusBadRequest, resp)
 		return
 	}
 	err := m.MkyAuditLogUcase.Create(&req)
 	if err != nil {
-		w.WriteError(http.StatusInternalServerError, err)
+		resp.Message = "服务器错误"
+		resp.Code = http.StatusInternalServerError
+		w.WriteHeaderAndEntity(http.StatusInternalServerError, resp)
 		return
 	}
-	w.WriteAsJson(nil)
+	w.WriteHeaderAndEntity(http.StatusOK,resp)
 }
 
 func (m *MkyAuditLogController) listMkyAuditLogs(r *restful.Request, w *restful.Response) {

@@ -18,3 +18,8 @@ type ListMkyAuditLogResp struct {
 	ListResponseMeta
 	MkyAuditLogs []*MkyAuditLog `json:"logs"`
 }
+
+type Response struct{
+	Message string `json:"msg"`
+	Code int `json:"code"`
+}
