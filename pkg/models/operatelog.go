@@ -13,7 +13,7 @@ type MkyAuditLog struct {
 	OPType   int    `gorm:"column:op_type" comment:"操作类型"`
 	OPName   string `gorm:"column:op_name;size:50" comment:"操作名称"`
 	OPDesc   string `gorm:"column:op_desc;size:3000" comment:"操作描述"`
-	LogLevel string `gorm:"column:log_level;size:50" comment:"日志等级"`
+	LogLevel string `gorm:"column:log_level;type:enum('info', 'warn');default:'info'" comment:"日志等级"`
 	LogType  int    `gorm:"column:log_type" comment:"日志类型, 1: 审计日志"`
 }
 
