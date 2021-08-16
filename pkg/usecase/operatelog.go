@@ -9,6 +9,7 @@ import (
 type MkyAuditLogUsecase interface {
 	Create(req *v1.MkyAuditLog) error
 	List(startTime, endTime, query string, page, pageSize int) (*v1.ListMkyAuditLogResp, error)
+	BatchCreateLogs(batchLogs *v1.BatchLogsReq) error
 }
 
 func NewMkyAuditLogUcase() MkyAuditLogUsecase {
@@ -60,4 +61,22 @@ func (m *mkyAuditLogUcase) List(startTime, endTime, query string, page, pageSize
 	resp.PageSize = pageSize
 	resp.TotalCount = total
 	return resp, nil
+}
+
+func (m *mkyAuditLogUcase) BatchCreateLogs(batchLogs *v1.BatchLogsReq) error {
+	var mkyAuditLogs []*models.MkyAuditLog
+	for _, req := range batchLogs.Datas {
+		mkyAuditLog := &models.MkyAuditLog{
+			UserID:   req.UserID,
+			StaffID:  req.StaffID,
+			IP:       req.IP,
+			OPType:   req.OPType,
+			OPName:   req.OPName,
+			OPDesc:   req.OPDesc,
+			LogLevel: req.LogLevel,
+			LogType:  req.LogType,
+		}
+		mkyAuditLogs = append(mkyAuditLogs, mkyAuditLog)
+	}
+	return m.MkyAuditLogRepo.BatchCreate(mkyAuditLogs)
 }

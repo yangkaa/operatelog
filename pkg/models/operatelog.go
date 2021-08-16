@@ -20,6 +20,7 @@ type MkyAuditLog struct {
 type MkyAuditLogRepository interface {
 	Create(log *MkyAuditLog) error
 	List(startTime, endTime, query string, page, pageSize int) ([]*MkyAuditLog, int64, error)
+	BatchCreate(logs []*MkyAuditLog) error
 }
 
 type MkyAuditLogRepo struct {
@@ -66,4 +67,11 @@ func (m *MkyAuditLogRepo) List(startTime, endTime, query string, page, pageSize 
 		return nil, 0, errors.Wrap(err, "list logs failed")
 	}
 	return logs, total, nil
+}
+
+func (m *MkyAuditLogRepo) BatchCreate(logs []*MkyAuditLog) error {
+	if err := m.DB.CreateInBatches(logs, 100).Error; err != nil {
+		return errors.Wrap(err, "batch create log failed")
+	}
+	return nil
 }

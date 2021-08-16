@@ -19,7 +19,11 @@ type ListMkyAuditLogResp struct {
 	MkyAuditLogs []*MkyAuditLog `json:"logs"`
 }
 
-type Response struct{
+type Response struct {
 	Message string `json:"msg"`
-	Code int `json:"code"`
+	Code    int    `json:"code"`
+}
+
+type BatchLogsReq struct {
+	Datas []*MkyAuditLog `json:"datas"`
 }
